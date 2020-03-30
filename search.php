@@ -24,19 +24,19 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="dv.html">Data Visualization</a>
+                <a class="nav-link" href="dv.php">Data Visualization</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="sld.html">Status of Living Diagnostic</a>
+                <a class="nav-link" href="sld.php">Status of Living Diagnostic</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="map.html">Map Representation</a>
+                <a class="nav-link" href="map.php">Map Representation</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="search.html">Filter/Search</a>
+                <a class="nav-link" href="search.php">Filter/Search</a>
             </li>
         </ul>
     </div>
