@@ -48,33 +48,35 @@
 	<div class="container-fluid padding">
 	<div class="user inputs">
 	      <div class="col-12">
-	        <h1 class>Heres some insight on our data and project goals:</h1>
+	        <h1 class>Select a County to observe and desired weights for each profile to receive a score for that County!</h1>
 	      </div>
 	      <hr>
-				<p>Select County to be observed:
+				Select County to be observed:
+				    <select id="nycountieslist">
 				  <?php
 								$filename = 'res/nycounties.txt';
 								$eachlines = file($filename, FILE_IGNORE_NEW_LINES);//create an array
-								echo '<select name="value" id="value">';
+
 									foreach($eachlines as $lines){
 										echo "<option>{$lines}</option>";
 									}
-									echo '</select>';
+
 					?>
-				</p>
-					<input id="text1" type="number" placeholder="Enter weight for crime." size="23">,
-					<input id="text2" type="number" placeholder="Enter weight for education." size="27">,
-					<input id="text3" type="number" placeholder="Enter weight for climate." size="25">,
-					<input id="text4" type="number" placeholder="Enter weight for economy." size="25">,
-					<input id="text5" type="number" placeholder="Enter weight for housing." size="25">
+				</select>
+					<br>
+					Crime:		<input id="text1" type="number" placeholder="Enter weight for crime." size="23"><br>
+					Education:		<input id="text2" type="number" placeholder="Enter weight for education." size="27"><br>
+					Climate:		<input id="text3" type="number" placeholder="Enter weight for climate." size="25"><br>
+					Economy:		<input id="text4" type="number" placeholder="Enter weight for economy." size="25"><br>
+					Housing:		<input id="text5" type="number" placeholder="Enter weight for housing." size="25">
 					<br>
 					<button onclick="fn1()" id="btn1">Submit</button>
 
-				<script type="text/javascript">
+					<script type="text/javascript">
+						var storedRes;
 						function fn1()
 						{
 							//Take inputs
-							var selCounty = document.getElementById("text0").value;
 							var crimeInput = document.getElementById("text1").value;
 							var educationInput = document.getElementById("text2").value;
 							var climateInput = document.getElementById("text3").value;
@@ -95,17 +97,21 @@
 								alert("ERROR: All weights must sum to 10");
 							}
 							else {
-
+									getSelectText();
 									var score = 0;
 									score = (crimeNum * 0.5) + (educationNum * 0.5) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50)
-									alert("The score for given county is " + score);
+									alert("The score for " + storedRes +  " is " + score + ".");
 							}
 						}
+						function getSelectText()
+						{
+							var e = document.getElementById("nycountieslist");
+							var result = e.options[e.selectedIndex].text;
+							storedRes = result;
+						}
 				</script>
-	</div>
-	<hr>
 
-				</script>
+	</div>
 	</div>
 
 
