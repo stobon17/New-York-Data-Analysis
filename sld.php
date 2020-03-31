@@ -48,10 +48,10 @@
 	<div class="container-fluid padding">
 	<div class="user inputs">
 	      <div class="col-12">
-	        <h1 class>Select a County to observe and desired weights for each profile to receive a score for that County!</h1>
+	        <h1 align="center">Select a County to observe and desired weights for each profile to receive a score for that County!</h1>
 	      </div>
 	      <hr>
-				Select County to be observed:
+				<p align="left">Select County to be observed:
 				    <select id="nycountieslist">
 				  <?php
 								$filename = 'res/nycounties.txt';
@@ -71,9 +71,10 @@
 					Housing:		<input id="text5" type="number" placeholder="Enter weight for housing." size="25">
 					<br>
 					<button onclick="fn1()" id="btn1">Submit</button>
-
+					</p>
 					<script type="text/javascript">
 						var storedRes;
+						var score = 0;
 						function fn1()
 						{
 							//Take inputs
@@ -98,9 +99,12 @@
 							}
 							else {
 									getSelectText();
-									var score = 0;
 									score = (crimeNum * 0.5) + (educationNum * 0.5) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50)
-									alert("The score for " + storedRes +  " is " + score + ".");
+									//Update text
+									document.getElementById("scoreIndicator").innerHTML = "We give " + storedRes + " a score of " + score + ".";
+									//Change color
+									document.getElementById("scoreIndicator").style.color = "green";
+									//alert("The score for " + storedRes +  " is " + score + ".");
 							}
 						}
 						function getSelectText()
@@ -110,7 +114,7 @@
 							storedRes = result;
 						}
 				</script>
-
+<p class="scoreI" id="scoreIndicator" align="right">Input weights and submit to calculate...</p>
 	</div>
 	</div>
 
