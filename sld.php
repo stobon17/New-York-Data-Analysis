@@ -93,18 +93,26 @@
 
 							var tot = crimeNum + educationNum + climateNum + economyNum + housingNum;
 
-							if (tot != 10)
+							if (tot != 10.0)
 							{
 								alert("ERROR: All weights must sum to 10");
 							}
 							else {
 									getSelectText();
-									score = (crimeNum * 0.5) + (educationNum * 0.5) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50)
-									//Update text
+									score = (crimeNum * 0.5) + (educationNum * 0.5) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50);
+									//Update text;
 									document.getElementById("scoreIndicator").innerHTML = "We give " + storedRes + " a score of " + score + ".";
-									//Change color
-									document.getElementById("scoreIndicator").style.color = "green";
-									//alert("The score for " + storedRes +  " is " + score + ".");
+									//Change color - with color range
+									if (score < 4)
+									{
+										document.getElementById("scoreIndicator").style.color = "red";
+									}else if (score > 4 && score < 7)
+									{
+										document.getElementById("scoreIndicator").style.color = "yellow";
+									}else
+									{
+											document.getElementById("scoreIndicator").style.color = "green";
+									}
 							}
 						}
 						function getSelectText()
