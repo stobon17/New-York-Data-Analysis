@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Input+Mono');
-
+@import url('https://fonts.googleapis.com/css?family=Abel&display=swap');
 /*---Styling HTML---*/
 html, body {
   height: 100%;
   width: 100%;
-  font-family: 'Input Mono', sans-serif;
+  font-family: 'Abel', sans-serif;
   background-color: #FFFFFF;
   color: #0;
+  font-size: 120%
 }
 
 /*---Styling Navbar---*/
