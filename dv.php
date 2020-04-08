@@ -63,14 +63,14 @@ async function setup() {
         const myChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: globalTemps.years,
+            labels: globalTemps.counties,
             datasets: [
               {
-                label: 'Temperature in °C',
+                label: 'Average Temperature in °F For The Years 2014-2019',
                 data: globalTemps.temps,
                 fill: true,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(46, 84, 255, 1)',
+                backgroundColor: 'rgba(46, 84, 255, 0.65)',
                 borderWidth: 1
               }
             ]
@@ -93,17 +93,17 @@ async function setup() {
 
 
 	async function getData() {
-        const response = await fetch('res/ZonAnn.Ts+dSST.csv');
+        const response = await fetch('res/Climate Data/NY Avg Temp.csv');
         const data = await response.text();
-        const years = [];
+        const counties = [];
         const temps = [];
         const rows = data.split('\n').slice(1);
         rows.forEach(row => {
           const cols = row.split(',');
-          years.push(cols[0]);
-          temps.push(14 + parseFloat(cols[1]));
+          counties.push(cols[1]);
+          temps.push(parseFloat(cols[2]));
         });
-        return { years, temps };
+        return { counties, temps };
       }
 
 	</script>
