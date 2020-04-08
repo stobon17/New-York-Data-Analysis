@@ -10,6 +10,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+	<script
+				src="https://code.jquery.com/jquery-3.4.1.min.js"
+				integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+				crossorigin="anonymous"></script>
 	<link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -44,6 +50,65 @@
 
   </div>
   </nav>
+<!--- Chart Container --->
+<body>
+<canvas id="chartcanvas" width="800" height="200"></canvas>
+
+	<script>
+window.addEventListener('load', setup);
+
+async function setup() {
+	var ctx = document.getElementById('chartcanvas').getContext('2d');
+	const globalTemps = await getData();
+        const myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: globalTemps.years,
+            datasets: [
+              {
+                label: 'Temperature in °C',
+                data: globalTemps.temps,
+                fill: true,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+						scales: {
+							yAxes: [
+								{
+									ticks: {
+										callback: function(value, index, values) {
+											return value + '°';
+										}
+									}
+								}
+							]
+						}
+					}
+        });
+}
+
+
+	async function getData() {
+        const response = await fetch('res/ZonAnn.Ts+dSST.csv');
+        const data = await response.text();
+        const years = [];
+        const temps = [];
+        const rows = data.split('\n').slice(1);
+        rows.forEach(row => {
+          const cols = row.split(',');
+          years.push(cols[0]);
+          temps.push(14 + parseFloat(cols[1]));
+        });
+        return { years, temps };
+      }
+
+	</script>
+</body>
+
 
 <!--- Footer -->
 <footer>
