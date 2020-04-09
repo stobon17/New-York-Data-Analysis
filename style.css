@@ -107,6 +107,15 @@ html, body {
   color: maroon;
 }
 
+
+/*---Styling DV---*/
+.graph1 {
+  padding-top: 2rem;
+}
+hr.hrgraph1 {
+  border-top: 1px solid grey;
+}
+
 /*---Media Queries (for multiple screen sizes) --*/
 @media (max-width: 992px) {
 

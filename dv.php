@@ -52,6 +52,9 @@
   </nav>
 <!--- Chart Container --->
 <body>
+<div class="container-fluid padding">
+<h5 class="graph1" align="center">Average New York County Temperature</h5>
+<hr class="hrgraph1">
 <canvas id="chartcanvas" width="800" height="200"></canvas>
 
 	<script>
@@ -107,15 +110,16 @@ async function setup() {
       }
 
 	</script>
+<hr class="hrgraph1">
 </body>
-
+</div>
 
 <!--- Footer -->
 <footer>
 <div class="col-12 text-center">
 
       <hr class="dark">
-      <h5>&copy;  CIS4301 Group 7 - University of Florida</h5>
+      <h5>&copy;  CIS4301 - Group 7 - University of Florida</h5>
     </div>
 
 </footer>

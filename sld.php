@@ -48,7 +48,7 @@
 	<div class="container-fluid padding">
 	<div class="user inputs">
 	      <div class="col-12">
-	        <h1 align="center">Select a County to observe and desired weights for each profile to receive a score for that County!</h1>
+	        <h1 align="center">Select a County to observe and desired weights (all weights must sum to <u>exactly</u> 10.) for each profile to receive a score for that County!</h1>
 	      </div>
 	      <hr>
 				<p align="left">Select County to be observed:
@@ -99,7 +99,10 @@
 							}
 							else {
 									getSelectText();
-									score = (crimeNum * 0.5) + (educationNum * 0.5) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50);
+									var crimeMul, educationMul, climateMul, economyMul, housingMul;
+									//For crime get MAX Count of cases per county, the county with highest count will be MAXCOUNT then per each county
+									//Find the count for that county and divide it by the MAXCOUNT
+									score = (crimeNum * 0.50) + (educationNum * 0.50) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50);
 									//Update text;
 									document.getElementById("scoreIndicator").innerHTML = "We give " + storedRes + " a score of " + score + ".";
 									//Change color - with color range
@@ -108,7 +111,7 @@
 										document.getElementById("scoreIndicator").style.color = "red";
 									}else if (score > 4 && score < 7)
 									{
-										document.getElementById("scoreIndicator").style.color = "yellow";
+										document.getElementById("scoreIndicator").style.color = "DarkGoldenRod";
 									}else
 									{
 											document.getElementById("scoreIndicator").style.color = "green";
