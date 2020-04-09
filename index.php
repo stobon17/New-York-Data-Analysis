@@ -111,10 +111,37 @@
 <div class="container-fluid">
 <div class="row jumbotron">
     <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
-          <p class="lead">TEMP PLACE HOLDER -- is it necessary?</p>
+          <p class="lead">For DEMO: Tuple Count Function --></p>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
-      <a href="#"><button type="button" class="btn btn-outline-secondary">Temp</button></a>
+      <form action="" method="post">
+        <input type="submit" name="sub" class="btn btn-outline-secondary" value="CLICK HERE TO GET TUPLE COUNT"/>
+      </form>
+<?php
+function tryfun($val)
+{
+  $guser = getenv('DBUSER');
+  $gpass = getenv('DBPASS');
+  $gconn = getenv('DBCONN');
+  $connection = oci_connect($username = $guser,
+                          $password = $gpass,
+                          $connection_string = $gconn);
+  $statement = oci_parse($connection, 'select ( select count(*) from AADAMES.CLIMATEPROFILE )+( select count(*) from AADAMES.CRIMEPROFILE )+( select count(*) from AADAMES.ECONOMICPROFILE )+( select count(*) from AADAMES.educationprofile )+( select count(*) from AADAMES.housingprofile ) as total_rows from dual');
+  $result = oci_execute($statement);
+
+  while ($rows = oci_fetch_array($statement))
+  {
+    $stringval = strval($rows[0]);
+    echo "The tuple count for all tables used is: {$stringval}.";
+  }
+}
+
+if(isset($_POST['sub']))
+{
+  echo tryfun($_POST['sub']);
+}
+
+?>
 </div>
 </div>
 
