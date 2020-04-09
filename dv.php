@@ -51,17 +51,16 @@
   </div>
   </nav>
 <!--- Chart Container --->
-<body>
 <div class="container-fluid padding">
 <h5 class="graph1" align="center">Average New York County Temperature</h5>
 <hr class="hrgraph1">
-<canvas id="chartcanvas" width="800" height="200"></canvas>
+<canvas id="chartcanvas1" width="800" height="200"></canvas>
 
-	<script>
+<script>
 window.addEventListener('load', setup);
 
 async function setup() {
-	var ctx = document.getElementById('chartcanvas').getContext('2d');
+	var ctx = document.getElementById('chartcanvas1').getContext('2d');
 	const globalTemps = await getData();
         const myChart = new Chart(ctx, {
           type: 'line',
@@ -109,10 +108,137 @@ async function setup() {
         return { counties, temps };
       }
 
-	</script>
+</script>
 <hr class="hrgraph1">
-</body>
+
+
+<!--- Pie Chart for Renter Occupied Houses in NY --->
+<div id="piecontainer">
+<div id="pie1">
+<h5 class="graph1" align="center" style="padding-bottom: 0.8rem;">Renter Occupied Housing in New York Counties</h5>
+<canvas id="chartcanvas2" width="400" height="100"></canvas>
+<hr class="hrgraph1">
 </div>
+<div id="pie2">
+<h5 class="graph1" align="center" style="padding-bottom: 0.8rem;">Owner Occupied Housing in New York Counties</h5>
+<canvas id="chartcanvas3" width="400" height="100"></canvas>
+<hr class="hrgraph1">
+</div>
+</div>
+</div>
+<script>
+
+window.addEventListener('load', setup2);
+
+async function setup2() {
+	var ctx2 = document.getElementById('chartcanvas2').getContext('2d');
+	const nyHousing = await getData2();
+
+	var colors = [];
+	var dynamicColors = function() {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+         };
+				 for (let i = 0; i < 62; i++)
+				 {
+					 colors.push(dynamicColors());
+				 }
+
+				         const myChart2 = new Chart(ctx2, {
+				           type: 'doughnut',
+				           data: {
+				             labels: nyHousing.counties,
+				             datasets: [
+				               {
+				                 data: nyHousing.renterOccupied,
+				                 fill: true,
+				                 backgroundColor: colors,
+				                 borderWidth: 1
+				               }
+				             ]
+				           },
+				           options: {}
+				         });
+				 }
+				 async function getData2() {
+				 			 const response = await fetch('res/Housing Data/Housing_data.csv');
+				 			 const data = await response.text();
+				 			 const counties = [];
+				 			 const ownerOccupied = [];
+				 			 const renterOccupied = [];
+				 			 const rows = data.split('\n').slice(1);
+				 			 rows.forEach(row => {
+				 				 const cols = row.split(',');
+				 				 counties.push(cols[1]);
+				 				 renterOccupied.push(parseFloat(cols[7]));
+				 			 });
+				 			 return { counties, renterOccupied };
+				 		 }
+
+
+
+</script>
+
+<script>
+
+window.addEventListener('load', setup3);
+
+async function setup3() {
+	var ctx3 = document.getElementById('chartcanvas3').getContext('2d');
+	const nyHousing2 = await getData3();
+
+	var colors = [];
+	var dynamicColors = function() {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+         };
+				 for (let i = 0; i < 62; i++)
+				 {
+					 colors.push(dynamicColors());
+				 }
+
+				         const myChart3 = new Chart(ctx3, {
+				           type: 'doughnut',
+				           data: {
+				             labels: nyHousing2.counties,
+				             datasets: [
+				               {
+				                 data: nyHousing2.ownerOccupied,
+				                 fill: true,
+				                 backgroundColor: colors,
+				                 borderWidth: 1
+				               }
+				             ]
+				           },
+				           options: {
+
+				 					}
+				         });
+				 }
+				 async function getData3() {
+				 			 const response = await fetch('res/Housing Data/Housing_data.csv');
+				 			 const data = await response.text();
+				 			 const counties = [];
+				 			 const ownerOccupied = [];
+				 			 const renterOccupied = [];
+				 			 const rows = data.split('\n').slice(1);
+				 			 rows.forEach(row => {
+				 				 const cols = row.split(',');
+				 				 counties.push(cols[1]);
+				 				 ownerOccupied.push(parseFloat(cols[6]));
+				 				 renterOccupied.push(parseFloat(cols[7]));
+				 			 });
+				 			 return { counties, ownerOccupied, renterOccupied };
+				 		 }
+
+
+
+</script>
+
 
 <!--- Footer -->
 <footer>

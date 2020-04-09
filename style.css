@@ -4,10 +4,17 @@
 html, body {
   height: 100%;
   width: 100%;
+  position: relative;
   font-family: 'Abel', sans-serif;
   background-color: #FFFFFF;
   color: #0;
   font-size: 120%
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 /*---Styling Navbar---*/
@@ -115,6 +122,7 @@ html, body {
 hr.hrgraph1 {
   border-top: 1px solid grey;
 }
+
 
 /*---Media Queries (for multiple screen sizes) --*/
 @media (max-width: 992px) {

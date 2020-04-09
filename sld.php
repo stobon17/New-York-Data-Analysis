@@ -48,7 +48,7 @@
 	<div class="container-fluid padding">
 	<div class="user inputs">
 	      <div class="col-12">
-	        <h1 align="center">Select a County to observe and desired weights (all weights must sum to <u>exactly</u> 10.) for each profile to receive a score for that County!</h1>
+	        <h1 align="center">Select a County to observe and desired weights (all weights must sum to <u>exactly</u> 10) for each profile to receive a score for that County!</h1>
 	      </div>
 	      <hr>
 				<p align="left">Select County to be observed:
