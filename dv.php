@@ -50,6 +50,10 @@
 
   </div>
   </nav>
+
+<!--- Database Connection --->
+<?php include('data.php') ?>
+
 <!--- Chart Container --->
 <div class="container-fluid padding">
 <h5 class="graph1" align="center">Average New York County Temperature</h5>
@@ -98,14 +102,14 @@ async function setup() {
         const response = await fetch('res/Climate Data/NY Avg Temp.csv');
         const data = await response.text();
         const counties = [];
-        const temps = [];
+        var temps = <?php echo json_encode($data); ?>;
+				const temps2 = [];
         const rows = data.split('\n').slice(1);
         rows.forEach(row => {
           const cols = row.split(',');
           counties.push(cols[1]);
-          temps.push(parseFloat(cols[2]));
         });
-        return { counties, temps };
+    		return { counties, temps };
       }
 
 </script>
