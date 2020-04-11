@@ -62,7 +62,7 @@
               <br/> How has crime changed over time in an area? What has the weather been like historically?
           </h3>
         <!--  <button type="button" class="btn btn-outline-light btn-lg">GO TO</button> -->
-          <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='dv.html';">GO TO</button>
+          <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='dv.php';">GO TO</button>
       </div>
 
   </div>
@@ -73,7 +73,7 @@
       <h3> Enables a user to specify weights for data profiles, and renders a score for a chosen area, using magic.
           <br/> Where should I live?
        </h3>
-      <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='sld.html';">GO TO</button>
+      <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='sld.php';">GO TO</button>
     </div>
   </div>
   <div class="carousel-item">
@@ -81,7 +81,7 @@
       <div class="carousel-caption">
         <h1 class="display-2">Map Representation </h1>
         <h3> How is the data geographically distributed in New York? In which areas is crime most prominent? </h3>
-        <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='map.html';">GO TO</button>
+        <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='map.php';">GO TO</button>
       </div>
   </div>
   <div class="carousel-item">
@@ -89,7 +89,7 @@
           <div class="carousel-caption">
             <h1 class="display-2">Filter/Search </h1>
             <h3> To conduct more specific searches. This tool filters the dataset and gets the desired information. </h3>
-            <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='search.html';">GO TO</button>
+            <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='search.php';">GO TO</button>
           </div>
   </div>
 </div>

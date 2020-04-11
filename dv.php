@@ -10,7 +10,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 	<script
 				src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -103,7 +102,6 @@ async function setup() {
         const data = await response.text();
         const counties = [];
         var temps = <?php echo json_encode($data); ?>;
-				const temps2 = [];
         const rows = data.split('\n').slice(1);
         rows.forEach(row => {
           const cols = row.split(',');
@@ -111,10 +109,8 @@ async function setup() {
         });
     		return { counties, temps };
       }
-
 </script>
 <hr class="hrgraph1">
-
 
 <!--- Pie Chart for Renter Occupied Houses in NY --->
 <div id="piecontainer">
