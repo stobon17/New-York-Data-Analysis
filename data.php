@@ -28,4 +28,5 @@ while( ($row = oci_fetch_row($avgtemp)) != false)
 
 oci_free_statement($avgtemp);
 oci_close($connection)
+
 ?>
