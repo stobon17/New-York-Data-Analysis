@@ -118,7 +118,7 @@
         <input type="submit" name="sub" class="btn btn-outline-secondary" value="CLICK HERE TO GET TUPLE COUNT"/>
       </form>
 <?php
-function tryfun($val)
+function tupleCount($val)
 {
   $guser = getenv('DBUSER');
   $gpass = getenv('DBPASS');
@@ -138,9 +138,8 @@ function tryfun($val)
 
 if(isset($_POST['sub']))
 {
-  echo tryfun($_POST['sub']);
+  echo tupleCount($_POST['sub']);
 }
-
 ?>
 </div>
 </div>
