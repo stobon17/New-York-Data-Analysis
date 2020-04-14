@@ -40,9 +40,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="map.php">Map Representation</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="search.php">Filter/Search</a>
-            </li>
         </ul>
     </div>
 
@@ -51,7 +48,7 @@
   </nav>
 
 <!--- Database Connection --->
-<?php include('data.php') ?>
+<?php include('data.php')?>
 
 <!--- Chart Container --->
 <div class="container-fluid padding">
@@ -125,9 +122,13 @@ async function setup() {
 <hr class="hrgraph1">
 </div>
 </div>
+<div id="bgcontainer">
+<h5 class="graph1" align="center"> Top 3 Crimes in New York By Year, 2014-2017 </h5>
+<canvas id="crimeBG" width="400" height="100"></canvas>
 </div>
-<script>
+</div>
 
+<script>
 window.addEventListener('load', setup2);
 
 async function setup2() {
@@ -176,13 +177,9 @@ async function setup2() {
 				 			 });
 				 			 return { counties, renterOccupied };
 				 		 }
-
-
-
 </script>
 
 <script>
-
 window.addEventListener('load', setup3);
 
 async function setup3() {
@@ -234,11 +231,74 @@ async function setup3() {
 				 			 });
 				 			 return { counties, ownerOccupied, renterOccupied };
 				 		 }
-
-
-
 </script>
+<!--- Crime Bar Graph --->
 
+<script>
+window.addEventListener('load', setup4);
+
+async function setup4() {
+	var ctx4 = document.getElementById('crimeBG').getContext('2d');
+	const crimeData = await getData4();
+				         const myChart4 = new Chart(ctx4, {
+				           type: 'bar',
+				           data: {
+				             labels: ["2014", "2015", "2016", "2017"],
+				             datasets: [
+				               {
+												 //Dangerous Drugs had the MAX count for all years
+				                 data: [crimeData.c2014[0], crimeData.c2015[0], crimeData.c2016[0], crimeData.c2017[0]],
+				                 label: crimeData.d2014[0],
+				                 backgroundColor: "green"
+				               },
+											 {
+												 //2nd Most committed
+												 data: [crimeData.c2014[1], crimeData.c2015[1], crimeData.c2016[1], crimeData.c2017[1]],
+				                 label: crimeData.d2014[1],
+				                 backgroundColor: "purple"
+											 },
+											 {
+												 //3rd most committed petit larceny 2014, 2017
+												 data: [crimeData.c2014[2], null, null, crimeData.c2017[2]],
+												 label: crimeData.d2014[2],
+												 backgroundColor: "blue"
+											 },
+											 {
+												 //3rd most theft 2015,2016
+												 data: [null, crimeData.c2015[2], crimeData.c2016[2], null],
+												 label: crimeData.d2015[2],
+												 backgroundColor: "red"
+											 },
+				             ]
+				           },
+									 options: {
+									    barValueSpacing: 1,
+											barPercentage: 1.0,
+											categoryPercentage: 1.0,
+									    scales: {
+									      yAxes: [{
+									        ticks: {
+									          min: 1,
+									        }
+									      }]
+									    }
+									  }
+				         });
+				 }
+				 async function getData4() {
+					 			//Descriptions
+					 			var d2014 = <?php echo json_encode($crime2014_desc); ?>;
+								var d2015 = <?php echo json_encode($crime2015_desc); ?>;
+								var d2016 = <?php echo json_encode($crime2016_desc); ?>;
+								var d2017 = <?php echo json_encode($crime2017_desc); ?>;
+								//Counts
+								var c2014 = <?php echo json_encode($crime2014_count); ?>;
+								var c2015 = <?php echo json_encode($crime2015_count); ?>;
+								var c2016 = <?php echo json_encode($crime2016_count); ?>;
+								var c2017 = <?php echo json_encode($crime2017_count); ?>;
+				 			 return { d2014, d2015, d2016, d2017, c2014, c2015, c2016, c2017 };
+				 		 }
+</script>
 
 <!--- Footer -->
 <footer>

@@ -35,9 +35,6 @@
           <li class="nav-item">
               <a class="nav-link" href="map.php">Map Representation</a>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" href="search.php">Filter/Search</a>
-          </li>
       </ul>
   </div>
 
@@ -51,7 +48,6 @@
   <li data-target="#slides" data-slide-to="0" class="active"></li>
   <li data-target="#slides" data-slide-to="1"></li>
   <li data-target="#slides" data-slide-to="2"></li>
-  <li data-target="#slides" data-slide-to="3"></li>
 </ul>
 <div class="carousel-inner">
   <div class="carousel-item active">
@@ -83,14 +79,6 @@
         <h3> How is the data geographically distributed in New York? In which areas is crime most prominent? </h3>
         <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='map.php';">GO TO</button>
       </div>
-  </div>
-  <div class="carousel-item">
-          <img src="img/background4.png">
-          <div class="carousel-caption">
-            <h1 class="display-2">Filter/Search </h1>
-            <h3> To conduct more specific searches. This tool filters the dataset and gets the desired information. </h3>
-            <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='search.php';">GO TO</button>
-          </div>
   </div>
 </div>
 

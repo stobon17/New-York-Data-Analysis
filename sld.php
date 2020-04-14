@@ -34,9 +34,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="map.php">Map Representation</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="search.php">Filter/Search</a>
-            </li>
         </ul>
     </div>
 
