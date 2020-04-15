@@ -5,7 +5,7 @@
 $guser = getenv('DBUSER');
 $gpass = getenv('DBPASS');
 $gconn = getenv('DBCONN');
-$connection = oci_connect($username = $guser,
+$connection = oci_pconnect($username = $guser,
                         $password = $gpass,
                         $connection_string = $gconn);
 //Make sure connection was sucessful.
@@ -38,8 +38,8 @@ function makeArray(&$query, &$arr1, &$arr2)
       array_push($arr1, $temp);
       array_push($arr2, $temp2);
   }
-  return $arr1;
 }
+
 //2014
 $crime2014 = oci_parse($connection, "SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-14' GROUP BY OFFENSEDESC ORDER BY num DESC");
 $result = oci_execute($crime2014);

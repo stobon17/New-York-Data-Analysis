@@ -114,7 +114,7 @@ function tupleCount($val)
   $connection = oci_connect($username = $guser,
                           $password = $gpass,
                           $connection_string = $gconn);
-  $statement = oci_parse($connection, 'select ( select count(*) from AADAMES.CLIMATEPROFILE )+( select count(*) from AADAMES.CRIMEPROFILE )+( select count(*) from AADAMES.ECONOMICPROFILE )+( select count(*) from AADAMES.educationprofile )+( select count(*) from AADAMES.housingprofile ) as total_rows from dual');
+  $statement = oci_parse($connection, 'select ( select count(*) from AADAMES.CLIMATEPROFILE )+( select count(*) from AADAMES.CRIMEPROFILE )+( select count(*) from AADAMES.ECONOMICPROFILE )+( select count(*) from AADAMES.educationprofile )+( select count(*) from AADAMES.housingprofile )+( select count(*) from CRIMECOUNTS ) as total_rows from dual');
   $result = oci_execute($statement);
 
   while ($rows = oci_fetch_array($statement))

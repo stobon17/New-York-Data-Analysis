@@ -48,7 +48,7 @@
 	        <h1 align="center">Select a County to observe and desired weights (all weights must sum to <u>exactly</u> 10) for each profile to receive a score for that County!</h1>
 	      </div>
 	      <hr>
-				<p align="left">Select County to be observed:
+						<p align="left">Select County to be observed:
 				    <select id="nycountieslist">
 				  <?php
 								$filename = 'res/nycounties.txt';
@@ -67,8 +67,70 @@
 					Economy:		<input id="text4" type="number" placeholder="Enter weight for economy." size="25"><br>
 					Housing:		<input id="text5" type="number" placeholder="Enter weight for housing." size="25">
 					<br>
-					<button onclick="fn1()" id="btn1">Submit</button>
-					</p>
+					<button onclick="fn1()" id="btn1" class="btn btn-outline-primary">Submit</button>
+					<?php
+					//Establish connection to database.
+					$guser = getenv('DBUSER');
+					$gpass = getenv('DBPASS');
+					$gconn = getenv('DBCONN');
+					$connection = oci_pconnect($username = $guser,
+					                        $password = $gpass,
+					                        $connection_string = $gconn);
+					//Make sure connection was sucessful.
+					if (!$connection) {
+					    $e = oci_error();
+					    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+					}
+
+					function getcid($cid)
+					{
+					  return $cid;
+					}
+
+					function makeArraysld(&$query, &$arr1)
+					{
+					  while( ($row = oci_fetch_row($query)) != false)
+					  {
+					      $temp = $row[0];
+					      array_push($arr1, $temp);
+					  }
+					}
+
+					//Crime Multiplier
+					$sldcrime = oci_parse($connection, 'SELECT crimecount FROM CRIMECOUNTS ORDER BY cid ASC');
+					oci_execute($sldcrime);
+					$sldcrimeres = array();
+					makeArraysld($sldcrime, $sldcrimeres);
+					oci_free_statement($sldcrime);
+
+					//Education Multiplier
+					$sldedu = oci_parse($connection, 'SELECT HSDIPLOMA + BACHELORDEGREE FROM AADAMES.EDUCATIONPROFILE ORDER BY cid ASC');
+					oci_execute($sldedu);
+					$sldedures = array();
+					makeArraysld($sldedu, $sldedures);
+					oci_free_statement($sldedu);
+
+					//Climate multiplier
+					$sldclim= oci_parse($connection, 'SELECT AVGTEMP FROM AADAMES.CLIMATEPROFILE ORDER BY cid ASC');
+					oci_execute($sldclim);
+					$sldclimres = array();
+					makeArraysld($sldclim, $sldclimres);
+					oci_free_statement($sldclim);
+
+					//Economy multiplier
+					$sldecon= oci_parse($connection, 'SELECT EMPLOYED-UNEMPLOYED FROM AADAMES.ECONOMICPROFILE ORDER BY cid ASC');
+					oci_execute($sldecon);
+					$sldeconres = array();
+					makeArraysld($sldecon, $sldeconres);
+					oci_free_statement($sldecon);
+
+					//Housing multiplier
+					$sldhousing= oci_parse($connection, 'SELECT PROPERTVALUE FROM AADAMES.HOUSINGPROFILE ORDER BY cid ASC');
+					oci_execute($sldhousing);
+					$sldhousingres = array();
+					makeArraysld($sldhousing, $sldhousingres);
+					oci_free_statement($sldhousing);
+					?>
 					<script type="text/javascript">
 						var storedRes;
 						var score = 0;
@@ -96,11 +158,36 @@
 							}
 							else {
 									getSelectText();
+									//Initialize multipliers
 									var crimeMul, educationMul, climateMul, economyMul, housingMul;
+									//Multiplier Arrays
+									crimeMulArr = <?php echo json_encode($sldcrimeres); ?>;
+									eduMulArr = <?php echo json_encode($sldedures); ?>;
+									climMulArr = <?php echo json_encode($sldclimres); ?>;
+									econMulArr = <?php echo json_encode($sldeconres); ?>;
+									housingMulArr = <?php echo json_encode($sldhousingres); ?>;
+									//Get Index of Select list
+									var x = document.getElementById("nycountieslist").selectedIndex;
+  								var y = document.getElementById("nycountieslist").options;
+									crimeMul = crimeMulArr[y[x].index];
+									educationMul = eduMulArr[y[x].index];
+									climateMul = climMulArr[y[x].index];
+									economyMul = econMulArr[y[x].index];
+									housingMul = housingMulArr[y[x].index];
 									//For crime get MAX Count of cases per county, the county with highest count will be MAXCOUNT then per each county
-									//Find the count for that county and divide it by the MAXCOUNT
-									score = (crimeNum * 0.50) + (educationNum * 0.50) + (climateNum * 0.50) + (economyNum * 0.50) + (housingNum * 0.50);
+									//Find the count for that county and divide it by the MAXCOUNT = 301348.
+									crimeMul = crimeMul / 301348;
+									educationMul = educationMul / 840473;
+									climateMul = climateMul / 55.8;
+									economyMul = economyMul / 454770;
+									housingMul = housingMul / 10;
+
+									score = (-1)*(crimeNum * crimeMul) + (educationNum * educationMul) + (climateNum * climateMul) + (economyNum * economyMul) + (housingNum * 1);
+									//Fix decimals
+									score = score.toFixed(2);
 									//Update text;
+
+
 									document.getElementById("scoreIndicator").innerHTML = "We give " + storedRes + " a score of " + score + ".";
 									//Change color - with color range
 									if (score < 4)
