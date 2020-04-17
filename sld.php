@@ -41,7 +41,7 @@
   </div>
   </nav>
 
-	<!--- Welcome Section/Project Overview -->
+	<!--- Calculate Score Section -->
 	<div class="container-fluid padding">
 	<div class="user inputs">
 	      <div class="col-12">
@@ -82,62 +82,63 @@
 					    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 					}
 
-					function getcid($cid)
-					{
-					  return $cid;
-					}
-
-					function makeArraysld(&$query, &$arr1)
+					function makeArraysld(&$query, &$arr1, &$arr2, &$arr3, &$arr4, &$arr5)
 					{
 					  while( ($row = oci_fetch_row($query)) != false)
 					  {
 					      $temp = $row[0];
-					      array_push($arr1, $temp);
+								$temp2 = $row[1];
+								$temp3 = $row[2];
+								$temp4 = $row[3];
+								//Housing $temp5 = $row[4];
+					      array_push($arr1, $temp); //Educ
+								array_push($arr2, $temp2); //econ
+								array_push($arr3, $temp3); //climate
+								array_push($arr4, $temp4); //crime
+								//array_push($arr5, $temp5);
 					  }
 					}
 
-					//Crime Multiplier
-					$sldcrime = oci_parse($connection, 'SELECT (crimecount) / (SELECT MAX(CRIMECOUNT)  FROM CRIMECOUNTS) FROM CRIMECOUNTS ORDER BY cid ASC');
-					oci_execute($sldcrime);
-					$sldcrimeres = array();
-					makeArraysld($sldcrime, $sldcrimeres);
-					oci_free_statement($sldcrime);
+					//Get all multipliers
+					$sldcombined = oci_parse($connection, 'WITH educ AS
+																								  (SELECT LEAST((HSDIPLOMA + BACHELORDEGREE) /
+																								                 AVG(HSDIPLOMA + BACHELORDEGREE) OVER (), 1) AS educ_res, cid
+																								   FROM AADAMES.EDUCATIONPROFILE
+																								  ),
+																								     econ AS
+																								  (SELECT LEAST((EMPLOYED -  UNEMPLOYED) /
+																								                AVG(EMPLOYED - UNEMPLOYED) OVER (), 1) AS econ_res, cid
+																								   FROM AADAMES.ECONOMICPROFILE
+																								  ),
+																								     clim AS
+																								  (SELECT ((MAXTEMP + MINTEMP)/ 2)/
+																								           (SELECT MAX((MAXTEMP + MINTEMP)/ 2) FROM AADAMES.CLIMATEPROFILE) AS climate_res, cid
+																								   FROM AADAMES.CLIMATEPROFILE
+																								  ),
+																								     crime AS
+																								  (SELECT (crimecount) / (SELECT MAX(CRIMECOUNT)  FROM CRIMECOUNTS) AS crime_res, cid
+																								   FROM CRIMECOUNTS
+																								  )
 
-					//Education Multiplier
-					$sldedu = oci_parse($connection, 'SELECT LEAST( (HSDIPLOMA + BACHELORDEGREE) / AVG(HSDIPLOMA + BACHELORDEGREE) OVER (),
-																							              1
-																							            ) as res
-																							FROM AADAMES.EDUCATIONPROFILE
-																							ORDER BY cid ASC');
-					oci_execute($sldedu);
+																								SELECT educ.educ_res, econ.econ_res, clim.climate_res, crime.crime_res
+																								FROM educ
+																								JOIN econ
+																								    ON educ.cid = econ.cid
+																								JOIN clim
+																								    ON clim.cid = educ.cid
+																								JOIN crime
+																								    ON crime.cid = educ.cid
+																								ORDER BY educ.cid');
+					oci_execute($sldcombined);
+
+					//Arrays per Profile
 					$sldedures = array();
-					makeArraysld($sldedu, $sldedures);
-					oci_free_statement($sldedu);
-
-					//Climate multiplier
-					$sldclim= oci_parse($connection, 'SELECT ((MAXTEMP + MINTEMP)/ 2)/ (SELECT MAX((MAXTEMP + MINTEMP)/ 2) FROM AADAMES.CLIMATEPROFILE) FROM AADAMES.CLIMATEPROFILE ORDER BY cid ASC');
-					oci_execute($sldclim);
-					$sldclimres = array();
-					makeArraysld($sldclim, $sldclimres);
-					oci_free_statement($sldclim);
-
-					//Economy multiplier
-					$sldecon= oci_parse($connection, 'SELECT LEAST( (EMPLOYED - UNEMPLOYED) / AVG(EMPLOYED - UNEMPLOYED) OVER (),
-																							              1
-																							            ) as res
-																							FROM AADAMES.ECONOMICPROFILE
-																							ORDER BY cid ASC');
-					oci_execute($sldecon);
 					$sldeconres = array();
-					makeArraysld($sldecon, $sldeconres);
-					oci_free_statement($sldecon);
-
-					//Housing multiplier
-					$sldhousing= oci_parse($connection, 'SELECT PROPERTVALUE FROM AADAMES.HOUSINGPROFILE ORDER BY cid ASC');
-					oci_execute($sldhousing);
+					$sldclimres = array();
+					$sldcrimeres = array();
 					$sldhousingres = array();
-					makeArraysld($sldhousing, $sldhousingres);
-					oci_free_statement($sldhousing);
+					makeArraysld($sldcombined, $sldedures, $sldeconres, $sldclimres, $sldcrimeres, $sldhousingres);
+					oci_free_statement($sldcombined);
 					?>
 					<script type="text/javascript">
 						var storedRes;
@@ -168,12 +169,14 @@
 									getSelectText();
 									//Initialize multipliers
 									var crimeMul, educationMul, climateMul, economyMul, housingMul;
+
 									//Multiplier Arrays
 									crimeMulArr = <?php echo json_encode($sldcrimeres); ?>;
 									eduMulArr = <?php echo json_encode($sldedures); ?>;
 									climMulArr = <?php echo json_encode($sldclimres); ?>;
 									econMulArr = <?php echo json_encode($sldeconres); ?>;
 									housingMulArr = <?php echo json_encode($sldhousingres); ?>;
+
 									//Get Index of Select list
 									var x = document.getElementById("nycountieslist").selectedIndex;
   								var y = document.getElementById("nycountieslist").options;
