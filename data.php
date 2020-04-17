@@ -41,7 +41,7 @@ function makeArray(&$query, &$arr1, &$arr2)
 }
 
 //2014
-$crime2014 = oci_parse($connection, "SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-14' GROUP BY OFFENSEDESC ORDER BY num DESC");
+$crime2014 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-14' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3");
 $result = oci_execute($crime2014);
 $crime2014_desc = array();
 $crime2014_count = array();
@@ -49,7 +49,7 @@ makeArray($crime2014, $crime2014_desc, $crime2014_count);
 oci_free_statement($crime2014);
 
 //2015
-$crime2015 = oci_parse($connection, "SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-15' GROUP BY OFFENSEDESC ORDER BY num DESC");
+$crime2015 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-15' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3");
 $result = oci_execute($crime2015);
 $crime2015_desc = array();
 $crime2015_count = array();
@@ -57,7 +57,7 @@ makeArray($crime2015, $crime2015_desc, $crime2015_count);
 oci_free_statement($crime2015);
 
 //2016
-$crime2016 = oci_parse($connection, "SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-16' GROUP BY OFFENSEDESC ORDER BY num DESC");
+$crime2016 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-16' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3");
 $result = oci_execute($crime2016);
 $crime2016_desc = array();
 $crime2016_count = array();
@@ -65,7 +65,7 @@ makeArray($crime2016, $crime2016_desc, $crime2016_count);
 oci_free_statement($crime2016);
 
 //2017
-$crime2017 = oci_parse($connection, "SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-17' GROUP BY OFFENSEDESC ORDER BY num DESC");
+$crime2017 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-17' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3");
 $result = oci_execute($crime2017);
 $crime2017_desc = array();
 $crime2017_count = array();

@@ -122,10 +122,15 @@ async function setup() {
 <hr class="hrgraph1">
 </div>
 </div>
-<div id="bgcontainer">
-<h5 class="graph1" align="center"> Top 3 Crimes in New York By Year, 2014-2017 </h5>
-<canvas id="crimeBG" width="400" height="100"></canvas>
+<!--- Drop Down Crime Bar Graph -->
+<h5 class="graph1" align="center" style="padding-bottom: 0.8rem;"> Top 3 Crimes in New York from 2014-2017</h5>
+<div id="myDIV" align="center">
+  <button class="btngraph active" onclick="changeData(0)">Top 3: 2014</button>
+  <button class="btngraph" onclick="changeData(1)">Top 3: 2015</button>
+  <button class="btngraph" onclick="changeData(2)">Top 3: 2016</button>
+	<button class="btngraph" onclick="changeData(3)">Top 3: 2017</button>
 </div>
+<canvas id="chart-0" width="400" height="100"></canvas>
 </div>
 
 <script>
@@ -232,73 +237,152 @@ async function setup3() {
 				 			 return { counties, ownerOccupied, renterOccupied };
 				 		 }
 </script>
-<!--- Crime Bar Graph --->
-
+<!--- Drop Down Bar Chart -->
 <script>
-window.addEventListener('load', setup4);
+function getTop3Data() {
+			 //Descriptions
+			 var d2014 = <?php echo json_encode($crime2014_desc); ?>;
+			 var d2015 = <?php echo json_encode($crime2015_desc); ?>;
+			 var d2016 = <?php echo json_encode($crime2016_desc); ?>;
+			 var d2017 = <?php echo json_encode($crime2017_desc); ?>;
+			 //Counts
+			 var c2014 = <?php echo json_encode($crime2014_count); ?>;
+			 var c2015 = <?php echo json_encode($crime2015_count); ?>;
+			 var c2016 = <?php echo json_encode($crime2016_count); ?>;
+			 var c2017 = <?php echo json_encode($crime2017_count); ?>;
+			return { d2014, d2015, d2016, d2017, c2014, c2015, c2016, c2017 };
+		}
 
-async function setup4() {
-	var ctx4 = document.getElementById('crimeBG').getContext('2d');
-	const crimeData = await getData4();
-				         const myChart4 = new Chart(ctx4, {
-				           type: 'bar',
-				           data: {
-				             labels: ["2014", "2015", "2016", "2017"],
-				             datasets: [
-				               {
-												 //Dangerous Drugs had the MAX count for all years
-				                 data: [crimeData.c2014[0], crimeData.c2015[0], crimeData.c2016[0], crimeData.c2017[0]],
-				                 label: crimeData.d2014[0],
-				                 backgroundColor: "green"
-				               },
-											 {
-												 //2nd Most committed
-												 data: [crimeData.c2014[1], crimeData.c2015[1], crimeData.c2016[1], crimeData.c2017[1]],
-				                 label: crimeData.d2014[1],
-				                 backgroundColor: "purple"
-											 },
-											 {
-												 //3rd most committed petit larceny 2014, 2017
-												 data: [crimeData.c2014[2], null, null, crimeData.c2017[2]],
-												 label: crimeData.d2014[2],
-												 backgroundColor: "blue"
-											 },
-											 {
-												 //3rd most theft 2015,2016
-												 data: [null, crimeData.c2015[2], crimeData.c2016[2], null],
-												 label: crimeData.d2015[2],
-												 backgroundColor: "red"
-											 },
-				             ]
-				           },
-									 options: {
-									    barValueSpacing: 1,
-											barPercentage: 1.0,
-											categoryPercentage: 1.0,
-									    scales: {
-									      yAxes: [{
-									        ticks: {
-									          min: 1,
-									        }
-									      }]
-									    }
-									  }
-				         });
-				 }
-				 async function getData4() {
-					 			//Descriptions
-					 			var d2014 = <?php echo json_encode($crime2014_desc); ?>;
-								var d2015 = <?php echo json_encode($crime2015_desc); ?>;
-								var d2016 = <?php echo json_encode($crime2016_desc); ?>;
-								var d2017 = <?php echo json_encode($crime2017_desc); ?>;
-								//Counts
-								var c2014 = <?php echo json_encode($crime2014_count); ?>;
-								var c2015 = <?php echo json_encode($crime2015_count); ?>;
-								var c2016 = <?php echo json_encode($crime2016_count); ?>;
-								var c2017 = <?php echo json_encode($crime2017_count); ?>;
-				 			 return { d2014, d2015, d2016, d2017, c2014, c2015, c2016, c2017 };
-				 		 }
+const crimeData = getTop3Data();
+
+var dataObjects = [
+  {
+    label: "Top 3 Crimes 2014",
+    data: [crimeData.c2014[0], crimeData.c2014[1], crimeData.c2014[2]]
+  },
+  {
+    label: "Top 3 Crimes 2015",
+    data: [crimeData.c2015[0], crimeData.c2015[1], crimeData.c2015[2]]
+  },
+  {
+    label: "Top 3 Crimes 2016",
+    data: [crimeData.c2016[0], crimeData.c2016[1], crimeData.c2016[2]]
+  },
+	{
+		label: "Top 3 Crimes 2017",
+		data: [crimeData.c2017[0], crimeData.c2017[1], crimeData.c2017[2]]
+	}
+]
+
+var labelObjects = [
+	{
+		labels: [crimeData.d2014[0], crimeData.d2014[1], crimeData.d2014[2]]
+	},
+	{
+		labels: [crimeData.d2015[0], crimeData.d2015[1], crimeData.d2015[2]]
+	},
+	{
+		labels: [crimeData.d2016[0], crimeData.d2016[1], crimeData.d2016[2]]
+	},
+	{
+		labels: [crimeData.d2017[0], crimeData.d2017[1], crimeData.d2017[2]]
+	}
+]
+
+/* data */
+var data = {
+  labels: labelObjects[0].labels,
+  datasets: [  {
+    label:  dataObjects[0].label,
+    data: dataObjects[0].data,
+    /* global setting */
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)'
+    ],
+    borderColor: [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)'
+    ],
+    borderWidth: 1
+  }]
+};
+
+var options = {
+  legend: {
+    display: true,
+    fillStyle: "red",
+
+    labels: {
+      boxWidth: 0,
+      fontSize: 24,
+      fontColor: "black",
+    }
+  },
+  scales: {
+    xAxes: [{
+      stacked: false,
+      scaleLabel: {
+        display: true,
+        labelString: 'Offense Description'
+      },
+    }],
+    yAxes: [{
+      stacked: true,
+      scaleLabel: {
+        display: true,
+        labelString: 'Crime Count'
+      },
+      ticks: {
+        suggestedMin: 0,
+        suggestedMax: 10
+      }
+    }]
+  },/*end scales */
+  plugins: {
+    // datalabels plugin
+    /*https://chartjs-plugin-datalabels.netlify.com*/
+    datalabels: {
+      color: 'black',
+      font:{
+        size: 25
+      }
+    }
+  }
+};
+
+var chart = new Chart('chart-0', {
+  type: 'bar',
+  data: data,
+  options: options
+});
+
+function changeData(index) {
+  chart.data.datasets.forEach(function(dataset) {
+    dataset.label = dataObjects[index].label;
+    dataset.data = dataObjects[index].data;
+
+    //dataset.backgroundColor = dataObjects[index].backgroundColor;
+  });
+	chart.data.labels = labelObjects[index].labels;
+  chart.update();
+}
+
+/* add active class on click */
+// Add active class to the current button (highlight it)
+var header = document.getElementById("myDIV");
+var btns = header.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
 </script>
+
 
 <!--- Footer -->
 <footer>

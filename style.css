@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Input+Mono');
 @import url('https://fonts.googleapis.com/css?family=Abel&display=swap');
 /*---Styling HTML---*/
 html, body {
@@ -185,7 +184,21 @@ figure {
     padding: 1rem;
 }
 
+/* Style the buttons */
+.btngraph {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  font-size: 18px;
+}
 
+/* Style the active class, and buttons on mouse-over */
+.btngraph:active, .btngraph:hover {
+  background-color: #1a73e8;
+  color: white;
+}
 
 
 

@@ -97,28 +97,36 @@
 					}
 
 					//Crime Multiplier
-					$sldcrime = oci_parse($connection, 'SELECT crimecount FROM CRIMECOUNTS ORDER BY cid ASC');
+					$sldcrime = oci_parse($connection, 'SELECT (crimecount) / (SELECT MAX(CRIMECOUNT)  FROM CRIMECOUNTS) FROM CRIMECOUNTS ORDER BY cid ASC');
 					oci_execute($sldcrime);
 					$sldcrimeres = array();
 					makeArraysld($sldcrime, $sldcrimeres);
 					oci_free_statement($sldcrime);
 
 					//Education Multiplier
-					$sldedu = oci_parse($connection, 'SELECT HSDIPLOMA + BACHELORDEGREE FROM AADAMES.EDUCATIONPROFILE ORDER BY cid ASC');
+					$sldedu = oci_parse($connection, 'SELECT LEAST( (HSDIPLOMA + BACHELORDEGREE) / AVG(HSDIPLOMA + BACHELORDEGREE) OVER (),
+																							              1
+																							            ) as res
+																							FROM AADAMES.EDUCATIONPROFILE
+																							ORDER BY cid ASC');
 					oci_execute($sldedu);
 					$sldedures = array();
 					makeArraysld($sldedu, $sldedures);
 					oci_free_statement($sldedu);
 
 					//Climate multiplier
-					$sldclim= oci_parse($connection, 'SELECT AVGTEMP FROM AADAMES.CLIMATEPROFILE ORDER BY cid ASC');
+					$sldclim= oci_parse($connection, 'SELECT ((MAXTEMP + MINTEMP)/ 2)/ (SELECT MAX((MAXTEMP + MINTEMP)/ 2) FROM AADAMES.CLIMATEPROFILE) FROM AADAMES.CLIMATEPROFILE ORDER BY cid ASC');
 					oci_execute($sldclim);
 					$sldclimres = array();
 					makeArraysld($sldclim, $sldclimres);
 					oci_free_statement($sldclim);
 
 					//Economy multiplier
-					$sldecon= oci_parse($connection, 'SELECT EMPLOYED-UNEMPLOYED FROM AADAMES.ECONOMICPROFILE ORDER BY cid ASC');
+					$sldecon= oci_parse($connection, 'SELECT LEAST( (EMPLOYED - UNEMPLOYED) / AVG(EMPLOYED - UNEMPLOYED) OVER (),
+																							              1
+																							            ) as res
+																							FROM AADAMES.ECONOMICPROFILE
+																							ORDER BY cid ASC');
 					oci_execute($sldecon);
 					$sldeconres = array();
 					makeArraysld($sldecon, $sldeconres);
@@ -176,10 +184,6 @@
 									housingMul = housingMulArr[y[x].index];
 									//For crime get MAX Count of cases per county, the county with highest count will be MAXCOUNT then per each county
 									//Find the count for that county and divide it by the MAXCOUNT = 301348.
-									crimeMul = crimeMul / 301348;
-									educationMul = educationMul / 840473;
-									climateMul = climateMul / 55.8;
-									economyMul = economyMul / 454770;
 									housingMul = housingMul / 10;
 
 									score = (-1)*(crimeNum * crimeMul) + (educationNum * educationMul) + (climateNum * climateMul) + (economyNum * economyMul) + (housingNum * 1);
