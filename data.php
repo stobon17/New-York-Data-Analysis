@@ -28,6 +28,18 @@ while( ($row = oci_fetch_row($avgtemp)) != false)
 
 oci_free_statement($avgtemp);
 
+//Precipitation
+$precip = oci_parse($connection, 'SELECT PRECIPLVL FROM AADAMES.CLIMATEPROFILE ORDER BY cid');
+$precipres = oci_execute($precip);
+
+$precipdata = array();
+
+while ( ($row = oci_fetch_row($precip)) != false)
+{
+  $temp = $row[0];
+  array_push($precipdata, $temp);
+}
+
 //Getting Max Count, Median, and Min of Crime per Year
 function makeArray(&$query, &$arr1, &$arr2)
 {

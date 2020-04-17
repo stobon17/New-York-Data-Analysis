@@ -50,63 +50,109 @@
 <!--- Database Connection --->
 <?php include('data.php')?>
 
-<!--- Chart Container --->
+<!--- Line Graph --->
 <div class="container-fluid padding">
-<h5 class="graph1" align="center">Average New York County Temperature</h5>
+<h5 class="graph1" align="center">Weather Statistics for all New York Counties 2014-2017</h5>
 <hr class="hrgraph1">
-<canvas id="chartcanvas1" width="800" height="200"></canvas>
-
+<div id="myDIV1" align="center">
+  <button class="btngraph active" onclick="changeData1(0)">Average Temperature</button>
+  <button class="btngraph" onclick="changeData1(1)">Average Precipitation Level</button>
+</div>
+<canvas id="multiline" width="800" height="200"></canvas>
 <script>
-window.addEventListener('load', setup);
-
-async function setup() {
-	var ctx = document.getElementById('chartcanvas1').getContext('2d');
-	const globalTemps = await getData();
-        const myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: globalTemps.counties,
-            datasets: [
-              {
-                label: 'Average Temperature in °F For The Years 2014-2019',
-                data: globalTemps.temps,
-                fill: true,
-                borderColor: 'rgba(46, 84, 255, 1)',
-                backgroundColor: 'rgba(46, 84, 255, 0.65)',
-                borderWidth: 1
-              }
-            ]
-          },
-          options: {
-						scales: {
-							yAxes: [
-								{
-									ticks: {
-										callback: function(value, index, values) {
-											return value + '°';
-										}
-									}
-								}
-							]
-						}
-					}
-        });
-}
-
-
-	async function getData() {
-        const response = await fetch('res/Climate Data/NY Avg Temp.csv');
-        const data = await response.text();
+var chart1;
+var dataObjects1;
+var labelObjects1;
+window.addEventListener('load', testsetup);
+async function getClimData() {
+			 //Descriptions
+				var tempavg = <?php echo json_encode($data); ?>;
+				var lvlprecip = <?php echo json_encode($precipdata); ?>;
+				const response = await fetch('res/Climate Data/NY Avg Temp.csv');
+        const countydata = await response.text();
         const counties = [];
-        var temps = <?php echo json_encode($data); ?>;
-        const rows = data.split('\n').slice(1);
+				const rows = countydata.split('\n').slice(1);
         rows.forEach(row => {
           const cols = row.split(',');
           counties.push(cols[1]);
         });
-    		return { counties, temps };
-      }
+				return {counties, tempavg, lvlprecip};
+		}
+
+async function testsetup()
+{
+const climData = await getClimData();
+
+dataObjects1 = [
+  {
+    label: "Average Temperature (°F) in New York for the Years 2014-2017",
+    data: climData.tempavg
+  },
+  {
+    label: "Average Precipitation Level (inches) in New York for the Years 2014-2017",
+    data: climData.lvlprecip
+  }
+]
+
+labelObjects1 = [
+	{
+		labels: climData.counties
+	},
+	{
+		labels: climData.counties
+	}
+]
+
+/* data */
+var data = {
+  labels: labelObjects1[0].labels,
+  datasets: [  {
+    label:  dataObjects1[0].label,
+    data: dataObjects1[0].data,
+    /* global setting */
+    backgroundColor: 'rgba(46, 84, 255, 0.65)',
+    borderColor: 'rgba(46, 84, 255, 1)',
+    borderWidth: 1
+  }]
+};
+
+var options = {
+
+};
+
+chart1 = new Chart('multiline', {
+  type: 'line',
+  data: data,
+  options: options
+});
+
+/* add active class on click */
+// Add active class to the current button (highlight it)
+var header = document.getElementById("myDIV1");
+var btns = header.getElementsByClassName("lbtn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+}
+function changeData1(index) {
+  chart1.data.datasets.forEach(function(dataset) {
+    dataset.label = dataObjects1[index].label;
+    dataset.data = dataObjects1[index].data;
+
+    //dataset.backgroundColor = dataObjects[index].backgroundColor;
+  });
+	chart1.data.labels = labelObjects1[index].labels;
+  chart1.update();
+}
 </script>
+
+
+
+
 <hr class="hrgraph1">
 
 <!--- Pie Chart for Renter Occupied Houses in NY --->
@@ -237,6 +283,7 @@ async function setup3() {
 				 			 return { counties, ownerOccupied, renterOccupied };
 				 		 }
 </script>
+
 <!--- Drop Down Bar Chart -->
 <script>
 function getTop3Data() {
@@ -342,8 +389,6 @@ var options = {
     }]
   },/*end scales */
   plugins: {
-    // datalabels plugin
-    /*https://chartjs-plugin-datalabels.netlify.com*/
     datalabels: {
       color: 'black',
       font:{
