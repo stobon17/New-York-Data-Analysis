@@ -84,6 +84,44 @@ $crime2017_count = array();
 makeArray($crime2017, $crime2017_desc, $crime2017_count);
 oci_free_statement($crime2017);
 
+
+//CRIMECOUNTS
+$crimecounts = oci_parse($connection, 'SELECT CRIMECOUNT FROM CRIMECOUNTS ORDER BY cid');
+$result = oci_execute($crimecounts);
+$crimecountsarr = array();
+while( ($row = oci_fetch_row($crimecounts)) != false)
+{
+    $temp = $row[0];
+    array_push($crimecountsarr, $temp);
+}
+oci_free_statement($crimecounts);
+$popcounts = oci_parse($connection, 'SELECT POPULATIONSIZE FROM AADAMES.POPULATIONPROFILE ORDER BY countyid');
+$result = oci_execute($popcounts);
+
+$popcountarr = array();
+while( ($row = oci_fetch_row($popcounts)) != false)
+{
+    $temp = $row[0];
+    array_push($popcountarr, $temp);
+}
+oci_free_statement($popcounts);
+
+//Computing Correlation between Crime and Population
+$correlation = oci_parse($connection, 'WITH pop AS
+  (SELECT POPULATIONSIZE, countyid FROM AADAMES.POPULATIONPROFILE
+  ),
+     crime AS
+  (SELECT CRIMECOUNT, cid FROM CRIMECOUNTS
+  )
+
+SELECT ROUND(CORR(crime.CRIMECOUNT, pop.POPULATIONSIZE),3) Correlation
+FROM pop
+JOIN crime
+    ON pop.countyid = crime.cid
+ORDER BY crime.cid');
+$result = oci_execute($correlation);
+$correlationresult = oci_fetch_row($correlation);
+
 oci_close($connection)
 
 ?>

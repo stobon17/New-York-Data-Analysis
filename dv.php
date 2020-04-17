@@ -50,10 +50,156 @@
 <!--- Database Connection --->
 <?php include('data.php')?>
 
+<!--- Scatter --->
+<div class="graphrow">
+	<div class="graphcolumn">
+			<h5 class="graph1" align="center">Crime vs. Population Scatter</h5>
+			<canvas id='ctx' width="200" height="100%" style="float: right;"></canvas>
+	</div>
+	<div class="graphcolumn">
+			<h5 class="graph1" align="center">Crime vs. Population Comparative Line Graph</h5>
+			<canvas id='linecomp' width="200" height="100%"></canvas>
+ </div>
+</div>
+<div>
+<button class="pcc" id="pccid" onclick="pcc()" style="color: #1a73e8;">Pearson's Correlation Coefficient: Click to compute...</button>
+</div>
+<script>
+function pcc() {
+	var correlationCoefficient = <?php echo json_encode($correlationresult); ?>;
+
+	document.getElementById("pccid").innerHTML = "Applying Pearson's Correlation Coefficient Test (computed through SQL) we see that the correlation coefficient is: " + correlationCoefficient + "." + "\n This indicates that there is a very strong positive correlation between the population rate and crime rate, the higher the population the higher the crime rate.";
+	document.getElementById("pccid").style.color = "purple";
+}
+</script>
+<!--- Scatter script --->
+<script>
+function getScatterData() {
+	var scatterCrime = <?php echo json_encode($crimecountsarr); ?>;
+	var scatterPop = <?php echo json_encode($popcountarr); ?>;
+			return { scatterCrime, scatterPop };
+		}
+
+var scatterData = getScatterData();
+var plot = [];
+for(var i=0;i<62;i++)
+				{
+						x = scatterData.scatterCrime[i];
+						y = scatterData.scatterPop[i];
+						var json = {x: x, y: y-1};
+						plot.push(json);
+				}
+var scatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Crime vs. Population',
+            data: plot,
+						backgroundColor: 'rgba(160, 59, 59, 1)'
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom'
+            }]
+        }
+    }
+});
+</script>
+<!--- Comparative Line graph script -->
+<script>
+window.addEventListener('load', testsetup1);
+async function getScatterData() {
+			 //Descriptions
+			 	var scatterCrime = <?php echo json_encode($crimecountsarr); ?>;
+ 		 		var scatterPop = <?php echo json_encode($popcountarr); ?>;
+				const response = await fetch('res/Climate Data/NY Avg Temp.csv');
+        const countydata = await response.text();
+        const counties = [];
+				const rows = countydata.split('\n').slice(1);
+        rows.forEach(row => {
+          const cols = row.split(',');
+          counties.push(cols[1]);
+        });
+				return {counties, scatterCrime, scatterPop};
+		}
+
+async function testsetup1()
+{
+const scatData = await getScatterData();
+
+dataObjects2 = [
+  {
+    label: "Crime Count",
+    data: scatData.scatterCrime
+  },
+  {
+    label: "Population Count",
+    data: scatData.scatterPop
+  }
+]
+
+labelObjects2 = [
+	{
+		labels: scatData.counties
+	},
+	{
+		labels: scatData.counties
+	}
+]
+
+/* data */
+var data = {
+  labels: labelObjects2[0].labels,
+  datasets: [  {
+    label:  dataObjects2[0].label,
+    data: dataObjects2[0].data,
+    /* global setting */
+    backgroundColor: 'rgba(46, 84, 255, 0.65)',
+    borderColor: 'rgba(46, 84, 255, 1)',
+    borderWidth: 1
+  },
+	{
+		label:  dataObjects2[1].label,
+    data: dataObjects2[1].data,
+    /* global setting */
+    backgroundColor: 'rgba(160, 59, 59, 0.65)',
+    borderColor: 'rgba(160, 59, 59, 1)',
+    borderWidth: 1
+	}]
+};
+
+var options = {
+
+};
+
+chart1 = new Chart('linecomp', {
+  type: 'line',
+  data: data,
+  options: options
+});
+}
+</script>
+
+
+<!--- Drop Down Crime Bar Graph -->
+<hr class="hrgraph1">
+<h5 class="graph1" align="center" style="padding-bottom: 0.8rem;"> Top 3 Crimes in New York from 2014-2017</h5>
+<div id="myDIV" align="center">
+  <button class="btngraph active" onclick="changeData(0)">Top 3: 2014</button>
+  <button class="btngraph" onclick="changeData(1)">Top 3: 2015</button>
+  <button class="btngraph" onclick="changeData(2)">Top 3: 2016</button>
+	<button class="btngraph" onclick="changeData(3)">Top 3: 2017</button>
+</div>
+<canvas id="chart-0" width="400" height="100"></canvas>
+</div>
+
 <!--- Line Graph --->
+<hr class="hrgraph1">
 <div class="container-fluid padding">
 <h5 class="graph1" align="center">Weather Statistics for all New York Counties 2014-2017</h5>
-<hr class="hrgraph1">
 <div id="myDIV1" align="center">
   <button class="btngraph active" onclick="changeData1(0)">Average Temperature</button>
   <button class="btngraph" onclick="changeData1(1)">Average Precipitation Level</button>
@@ -157,16 +303,7 @@ function changeData1(index) {
 <hr class="hrgraph1">
 </div>
 </div>
-<!--- Drop Down Crime Bar Graph -->
-<h5 class="graph1" align="center" style="padding-bottom: 0.8rem;"> Top 3 Crimes in New York from 2014-2017</h5>
-<div id="myDIV" align="center">
-  <button class="btngraph active" onclick="changeData(0)">Top 3: 2014</button>
-  <button class="btngraph" onclick="changeData(1)">Top 3: 2015</button>
-  <button class="btngraph" onclick="changeData(2)">Top 3: 2016</button>
-	<button class="btngraph" onclick="changeData(3)">Top 3: 2017</button>
-</div>
-<canvas id="chart-0" width="400" height="100"></canvas>
-</div>
+
 
 <script>
 window.addEventListener('load', setup2);

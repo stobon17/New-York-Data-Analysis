@@ -193,8 +193,6 @@
 									//Fix decimals
 									score = score.toFixed(2);
 									//Update text;
-
-
 									document.getElementById("scoreIndicator").innerHTML = "We give " + storedRes + " a score of " + score + ".";
 									//Change color - with color range
 									if (score < 4)
