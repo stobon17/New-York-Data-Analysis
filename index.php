@@ -140,13 +140,16 @@ if(isset($_POST['sub']))
       </div>
       <hr>
       <div class="col-12">
-          <p class="lead">The goal of our project is to provide users some greater insight on an area in
-            the state of New York. This is done by providing data visualizations on crime, climate, housing, and economical factors
-            within an area. With all this data in mind users can make weigh their options and make
-            a decision on where they would like to live in New York. If a user is stuck between several places
-            they can use the Status of Living Diagnostic to calculate scores for an area based on weights they enter, and
-            come to a conclusion that way. <br/>
-            Our data was collected from multiple sources such as, </p>
+          <p class="lead">The goal of our project is to provide users some greater insight on counties in
+            the state of New York and how they differ. This is done by providing data visualizations on crime, climate, housing, and economical factors
+            within a county. The purpose of this project was to determine the Quality of Life in an area. This is done by using the aforementioned data and assigning them
+            weights based on their level of importance. 
+            If the user is not interested in the Quality of Life calculation, there are other data visualizations that give insight to how different factors can affect one another. 
+           <br/>
+            Our data was collected from multiple sources such as, the <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2016/">United States Census</a>, the <a href="https://www.ncdc.noaa.gov/cag/county/mapping">National Centers for Environmental Information</a>  
+            and <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u">NYC Open Data </a> 
+            These sites allow for easy download of data, which was then narrowed down as per project interest, inserted in an SQL database and  then presented here in a visual format.
+            </p>
 </div>
 <hr>
 </div>
