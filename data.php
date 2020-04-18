@@ -86,7 +86,7 @@ oci_free_statement($crime2017);
 
 
 //CRIMECOUNTS
-$crimecounts = oci_parse($connection, 'SELECT CRIMECOUNT FROM CRIMECOUNTS ORDER BY cid');
+$crimecounts = oci_parse($connection, 'SELECT YEAR2016+YEAR2017+YEAR2018 FROM AADAMES.CRIMECOUNT ORDER BY countyname');
 $result = oci_execute($crimecounts);
 $crimecountsarr = array();
 while( ($row = oci_fetch_row($crimecounts)) != false)
@@ -95,7 +95,7 @@ while( ($row = oci_fetch_row($crimecounts)) != false)
     array_push($crimecountsarr, $temp);
 }
 oci_free_statement($crimecounts);
-$popcounts = oci_parse($connection, 'SELECT POPULATIONSIZE FROM AADAMES.POPULATIONPROFILE ORDER BY countyid');
+$popcounts = oci_parse($connection, 'SELECT POPULATION FROM AADAMES.CRIMECOUNT ORDER BY countyname');
 $result = oci_execute($popcounts);
 
 $popcountarr = array();
