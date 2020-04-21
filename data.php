@@ -106,6 +106,52 @@ while( ($row = oci_fetch_row($popcounts)) != false)
 }
 oci_free_statement($popcounts);
 
+//CRIMERATE FROM CRIMECOUNTS 2016
+$crimerate = oci_parse($connection, 'SELECT YEAR2016/POPULATION AS CRIMERATE FROM AADAMES.CRIMECOUNT ORDER BY countyname; ');
+$result = oci_execute($crimerate);
+$crimecountsarr = array();
+while( ($row = oci_fetch_row($crimerate)) != false)
+{
+    $temp = $row[0];
+    array_push($crimeratearr, $temp);
+}
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//EDUCATION RATE FROM 2016 
+
+$education = oci_parse($connection, 'SELECT YEAR2016/POPULATION AS CRIMERATE FROM AADAMES.CRIMECOUNT ORDER BY countyname; ');
+$result = oci_execute($educationrate);
+$education = array();
+while( ($row = oci_fetch_row($education)) != false)
+{
+    $temp = $row[0];
+    array_push($educationarr, $temp);
+}
+$educationrate = $educationarr/$popcounts; 
+
+//COUNTIES (FOR X AXIS ON LINE GRAPH)
+
+$counties = oci_parse($connection, 'SELECT  AS CRIMERATE FROM AADAMES.CRIMECOUNT ORDER BY countyname; ');
+$result = oci_execute($counties);
+$counties = array();
+while( ($row = oci_fetch_row($counties)) != false)
+{
+    $temp = $row[0];
+    array_push($counties, $temp);
+}
+
+//MEDIAN INCOME OF HOUSING  TABLE IS NOT MADE YET BUT DATA IS HERE 
+$income = oci_parse($connection, 'SELECT  AS INCOME FROM AADAMES.HOUSING ORDER BY countyname; ');
+$result = oci_execute($income);
+$income  = array();
+while( ($row = oci_fetch_row($income )) != false)
+{
+    $temp = $row[0];
+    array_push($income , $temp);
+}
+
+
 //Computing Correlation between Crime and Population
 $correlation = oci_parse($connection, 'WITH pop AS
   (SELECT POPULATIONSIZE, countyid FROM AADAMES.POPULATIONPROFILE

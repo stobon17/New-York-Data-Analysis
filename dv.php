@@ -16,6 +16,7 @@
 				integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 				crossorigin="anonymous"></script>
 	<link href="style.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
   <!-- Navigation Bar -->
@@ -181,6 +182,82 @@ chart1 = new Chart('linecomp', {
   options: options
 });
 }
+</script>
+
+
+<script>
+//!!!!!!!!!!!!!!!!!!!!CRIME AND EDUCATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	var CrimeRate = <?php echo json_encode($crimeratearr); ?>;
+	var EducationRate = <?php echo json_encode($educationrate); ?>;
+  var Counties = <?php echo json_encode($counties); ?>;
+ 
+var lineCrimeRate = {
+  x: Counties,
+  y: CrimeRate,
+  type: 'scatter',
+  name: 'Crime Rate'
+};
+
+var lineEducationRate = {
+  x: Counties,
+  y: EducationRat,
+  type: 'scatter',
+  name: 'Education Rate'
+};
+
+var data = [lineCrimeRate, lineEducationRate];
+
+var layout = {
+  title: 'Comparision of Crime Rate with Education',
+  xaxis: {
+    title: 'Rate of Crime by Population'
+  },
+  yaxis: {
+    title: 'Rate of Highschool Education and Higher by Population'
+  }
+};
+
+//CHANGE MY DIV TO CURRENT DIV CONTAINER
+Plotly.newPlot('myDiv', data)
+
+</script> 
+
+
+<script>
+//!!!!!!!!!!!!!!!!!!!!AVG TEMP AND INCOME OVER THE YEARS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+var trace1 = {
+  x: <?php echo json_encode($avgtemp); ?>,
+  y: [40, 45, 50, 55, 60],
+  name: 'Average Temperature',
+  type: 'scatter'
+};
+
+var trace2 = {
+  x: [2, 3, 4],
+  y: [4, 5, 6],
+  name: 'Income',
+  yaxis: 'y2',
+  type: 'scatter'
+};
+
+var data = [trace1, trace2];
+
+var layout = {
+  title: 'Comparision of Climate and Income',
+  yaxis: {title: 'Average Temperature'},
+  yaxis2: {
+    title: 'Median Household Income',
+    titlefont: {color: 'rgb(148, 103, 189)'},
+    tickfont: {color: 'rgb(148, 103, 189)'},
+    overlaying: 'y',
+    side: 'right'
+  }
+};
+//CHANGE MY DIV TO CURRENT DIV CONTAINER
+Plotly.newPlot('myDiv', data, layout);
+
 </script>
 
 
