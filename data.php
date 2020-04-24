@@ -120,8 +120,7 @@ while( ($row = oci_fetch_row($crimerate)) != false)
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //EDUCATION RATE FROM 2016
 
-$education = oci_parse($connection, 'SELECT HSDIPLOMA+ASDEGREE+BACHELORDEG+GRADUATEDEG
-                                          FROM AADAMES.EDUCATIONYEAR WHERE(EDUCATIONYEAR.YEAR = 2016) ORDER BY COUNTYNAME');
+$education = oci_parse($connection, 'SELECT (HSDIPLOMA+ASDEGREE+BACHELORDEGREE+GRADUATE) AS EDU FROM AADAMES.EDUCATIONPROFILE ORDER BY CID');
 $result = oci_execute($education);
 $educationarr = array();
 while( ($row = oci_fetch_row($education)) != false)
@@ -151,6 +150,17 @@ while( ($row = oci_fetch_row($income )) != false)
     $temp = $row[0];
     array_push($incomearr , $temp);
 }
+
+//POPULATION SIZE
+$popsize = oci_parse($connection, 'SELECT POPULATIONSIZE  FROM AADAMES.POPULATIONPROFILE ORDER BY countyname');
+$result = oci_execute($popsize);
+$popsizearr = array();
+while( ($row = oci_fetch_row($popsize)) != false)
+{
+    $temp = $row[0];
+    array_push($popsizearr, $temp);
+}
+
 
 //Computing Correlation between Crime and Population
 $correlation = oci_parse($connection, 'WITH pop AS

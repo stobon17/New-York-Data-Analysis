@@ -347,8 +347,6 @@ Plotly.newPlot('testdiv', data, layout);
 
 </script>
 
-
-
 <div class="test" id='test' width="400" height="100"></div>
 <script>
 //!!!!!!!!!!!!!!!!!!!!CRIME AND EDUCATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -356,44 +354,49 @@ Plotly.newPlot('testdiv', data, layout);
 	var CrimeRate = <?php echo json_encode($crimeratearr); ?>;
 	var Education = <?php echo json_encode($educationarr); ?>;
   var Counties = <?php echo json_encode($countiesarr); ?>;
-  var Population = <?php echo json_encode( $popcountarr ); ?>;
+  var Population = <?php echo json_encode($popsizearr); ?>;
  
   var EducationRate = []; 
 
-  for(var i = 0; i< Population; i++){
+  for(var i = 0; i< Population.length; i++){
       EducationRate.push(Education[i]/Population[i]);
+      
     }
-  
+
+
 var lineCrimeRate = {
   x: Counties,
   y: CrimeRate,
-  type: 'scatter',
-  name: 'Crime Rate'
+  name: 'Crime Rate',
+  type: 'scatter'
 };
 
 var lineEducationRate = {
   x: Counties,
   y: EducationRate,
+  name: 'Education Rate',
+  yaxis: 'y2',
   type: 'scatter',
-  name: 'Education Rate'
 };
 
 var data = [lineCrimeRate, lineEducationRate];
 
 var layout = {
-  title: 'Comparision of Crime Rate with Education',
-  xaxis: {
-    title: 'Rate of Crime by Population'
-  },
-  yaxis: {
-    title: 'Rate of Highschool Education and Higher by Population'
+  title: 'Comparison of Education and Crime',
+  yaxis: {title: 'Rate of Crime by Population'},
+  yaxis2: {
+    title: 'Rate of Highschool Education and Higher by Population',
+    titlefont: {color: 'rgb(148, 103, 189)'},
+    tickfont: {color: 'rgb(148, 103, 189)'},
+    overlaying: 'y',
+    side: 'right'
   }
 };
 
 //CHANGE MY DIV TO CURRENT DIV CONTAINER
 Plotly.newPlot('test', data, layout)
-
 </script>
+
 
 <script>
 window.addEventListener('load', setup2);

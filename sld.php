@@ -90,45 +90,52 @@
 								$temp2 = $row[1];
 								$temp3 = $row[2];
 								$temp4 = $row[3];
-								//Housing $temp5 = $row[4];
+								$temp5 = $row[4];
 					      array_push($arr1, $temp); //Educ
 								array_push($arr2, $temp2); //econ
 								array_push($arr3, $temp3); //climate
 								array_push($arr4, $temp4); //crime
-								//array_push($arr5, $temp5);
+								array_push($arr5, $temp5);
 					  }
 					}
 
 					//Get all multipliers
 					$sldcombined = oci_parse($connection, 'WITH educ AS
-																								  (SELECT LEAST((HSDIPLOMA + BACHELORDEGREE) /
-																								                 AVG(HSDIPLOMA + BACHELORDEGREE) OVER (), 1) AS educ_res, cid
-																								   FROM AADAMES.EDUCATIONPROFILE
-																								  ),
-																								     econ AS
-																								  (SELECT LEAST((EMPLOYED -  UNEMPLOYED) /
-																								                AVG(EMPLOYED - UNEMPLOYED) OVER (), 1) AS econ_res, cid
-																								   FROM AADAMES.ECONOMICPROFILE
-																								  ),
-																								     clim AS
-																								  (SELECT ((MAXTEMP + MINTEMP)/ 2)/
-																								           (SELECT MAX((MAXTEMP + MINTEMP)/ 2) FROM AADAMES.CLIMATEPROFILE) AS climate_res, cid
-																								   FROM AADAMES.CLIMATEPROFILE
-																								  ),
-																								     crime AS
-																								  (SELECT (crimecount) / (SELECT MAX(CRIMECOUNT)  FROM CRIMECOUNTS) AS crime_res, cid
-																								   FROM CRIMECOUNTS
-																								  )
+ (SELECT LEAST((HSDIPLOMA + BACHELORDEGREE) /
+ AVG(HSDIPLOMA + BACHELORDEGREE) OVER (), 1) AS educ_res, cid
+ FROM AADAMES.EDUCATIONPROFILE
+ ),
+ econ AS
+ (SELECT LEAST((EMPLOYED - UNEMPLOYED) /
+ AVG(EMPLOYED - UNEMPLOYED) OVER (), 1) AS econ_res, cid
+ FROM STOBON.ECONOMICPROFILE
+ ),
+ clim AS
+ (SELECT ((MAXTEMP + MINTEMP)/ 2)/
+ (SELECT MAX((MAXTEMP + MINTEMP)/ 2) FROM AADAMES.CLIMATEPROFILE) AS climate_res, cid
+ FROM AADAMES.CLIMATEPROFILE
+ ),
+ crime AS
+ (SELECT (crimecount) / (SELECT MAX(CRIMECOUNT) FROM STOBON.CRIMECOUNTS) AS crime_res, cid
+ FROM CRIMECOUNTS
+ ),
+ house AS
+ (SELECT LEAST((MEDIANINCOME) /
+ AVG(MEDIANINCOME) OVER (), 1) AS housing_res, cid
+ FROM STOBON.HOUSING
+ )
 
-																								SELECT educ.educ_res, econ.econ_res, clim.climate_res, crime.crime_res
-																								FROM educ
-																								JOIN econ
-																								    ON educ.cid = econ.cid
-																								JOIN clim
-																								    ON clim.cid = educ.cid
-																								JOIN crime
-																								    ON crime.cid = educ.cid
-																								ORDER BY educ.cid');
+ SELECT educ.educ_res, econ.econ_res, clim.climate_res, crime.crime_res, house.housing_res
+ FROM educ
+ JOIN econ
+ ON educ.cid = econ.cid
+ JOIN clim
+ ON clim.cid = educ.cid
+ JOIN crime
+ ON crime.cid = educ.cid
+ JOIN house
+ ON house.cid = educ.cid
+ ORDER BY educ.cid');
 					oci_execute($sldcombined);
 
 					//Arrays per Profile
@@ -187,9 +194,9 @@
 									housingMul = housingMulArr[y[x].index];
 									//For crime get MAX Count of cases per county, the county with highest count will be MAXCOUNT then per each county
 									//Find the count for that county and divide it by the MAXCOUNT = 301348.
-									housingMul = housingMul / 10;
 
-									score = (-1)*(crimeNum * crimeMul) + (educationNum * educationMul) + (climateNum * climateMul) + (economyNum * economyMul) + (housingNum * 1);
+
+									score = (-1)*(crimeNum * crimeMul) + (educationNum * educationMul) + (climateNum * climateMul) + (economyNum * economyMul) + (housingNum * housingMul);
 									//Fix decimals
 									score = score.toFixed(2);
 									//Update text;

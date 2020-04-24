@@ -114,7 +114,7 @@ function tupleCount($val)
   $connection = oci_connect($username = $guser,
                           $password = $gpass,
                           $connection_string = $gconn);
-  $statement = oci_parse($connection, 'select ( select count(*) from AADAMES.CLIMATEPROFILE )+( select count(*) from AADAMES.CRIMEPROFILE )+( select count(*) from AADAMES.ECONOMICPROFILE )+( select count(*) from AADAMES.educationprofile )+( select count(*) from AADAMES.housingprofile )+( select count(*) from CRIMECOUNTS ) as total_rows from dual');
+  $statement = oci_parse($connection, 'select ( select count(*) from AADAMES.CLIMATEPROFILE )+( select count(*) from AADAMES.CRIMEPROFILE )+( select count(*) from AADAMES.ECONOMICPROFILE )+( select count(*) from AADAMES.educationprofile )+( select count(*) from AADAMES.housing )+( select count(*) from AADAMES.CRIMECOUNT )+( select count(*) from AADAMES.EDUCATIONYEAR ) as total_rows from dual');
   $result = oci_execute($statement);
 
   while ($rows = oci_fetch_array($statement))
@@ -143,11 +143,11 @@ if(isset($_POST['sub']))
           <p class="lead">The goal of our project is to provide users some greater insight on counties in
             the state of New York and how they differ. This is done by providing data visualizations on crime, climate, housing, and economical factors
             within a county. The purpose of this project was to determine the Quality of Life in an area. This is done by using the aforementioned data and assigning them
-            weights based on their level of importance. 
-            If the user is not interested in the Quality of Life calculation, there are other data visualizations that give insight to how different factors can affect one another. 
+            weights based on their level of importance.
+            If the user is not interested in the Quality of Life calculation, there are other data visualizations that give insight to how different factors can affect one another.
            <br/>
-            Our data was collected from multiple sources such as, the <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2016/">United States Census</a>, the <a href="https://www.ncdc.noaa.gov/cag/county/mapping">National Centers for Environmental Information</a>  
-            and <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u">NYC Open Data </a> 
+            Our data was collected from multiple sources such as, the <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2016/">United States Census</a>, the <a href="https://www.ncdc.noaa.gov/cag/county/mapping">National Centers for Environmental Information</a>
+            and <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u">NYC Open Data </a>
             These sites allow for easy download of data, which was then narrowed down as per project interest, inserted in an SQL database and  then presented here in a visual format.
             </p>
 </div>
