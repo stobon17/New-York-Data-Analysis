@@ -15,7 +15,7 @@ if (!$connection) {
 }
 
 //Weather Avg
-$avgtemp = oci_parse($connection, 'SELECT (MAXTEMP + MINTEMP) / 2 FROM AADAMES.CLIMATEPROFILE');
+$avgtemp = oci_parse($connection, 'SELECT (MAXTEMP + MINTEMP) / 2 FROM AADAMES.CLIMATEPROFILE'); //*** QUERY TREND 1 ***
 $result = oci_execute($avgtemp);
 
 $data = array();
@@ -53,7 +53,7 @@ function makeArray(&$query, &$arr1, &$arr2)
 }
 
 //2014
-$crime2014 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-14' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3");
+$crime2014 = oci_parse($connection, "SELECT * FROM (SELECT OFFENSEDESC, COUNT(*) AS num FROM AADAMES.CRIMEPROFILE WHERE ARRESTDATE LIKE '%-14' GROUP BY OFFENSEDESC ORDER BY num DESC) WHERE ROWNUM <= 3"); //*** TREND QUERY 2
 $result = oci_execute($crime2014);
 $crime2014_desc = array();
 $crime2014_count = array();
@@ -107,7 +107,7 @@ while( ($row = oci_fetch_row($popcounts)) != false)
 oci_free_statement($popcounts);
 
 //CRIMERATE FROM CRIMECOUNTS 2016
-$crimerate = oci_parse($connection, 'SELECT YEAR2016/POPULATION AS CRIMERATE FROM AADAMES.CRIMECOUNT ORDER BY countyname');
+$crimerate = oci_parse($connection, 'SELECT YEAR2016/POPULATION AS CRIMERATE FROM AADAMES.CRIMECOUNT ORDER BY countyname'); //*** TREND QUERY 3 ***
 $result = oci_execute($crimerate);
 $crimeratearr = array();
 while( ($row = oci_fetch_row($crimerate)) != false)
@@ -162,7 +162,7 @@ while( ($row = oci_fetch_row($popsize)) != false)
 }
 
 
-//Computing Correlation between Crime and Population
+//Computing Correlation between Crime and Population   // **TEND QUERY 5
 $correlation = oci_parse($connection, 'WITH pop AS
   (SELECT POPULATIONSIZE, countyid FROM AADAMES.POPULATIONPROFILE
   ),
