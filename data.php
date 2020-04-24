@@ -163,18 +163,31 @@ while( ($row = oci_fetch_row($popsize)) != false)
 
 
 //Computing Correlation between Crime and Population
+
+/* 
+Simon, this is throwing an error. Possibly because of
+"crime AS
+(SELECT CRIMECOUNT, cid FROM CRIMECOUNTS
+)"
+Don't think it is recognizing CRIMECOUNTS and I don't know where it is defined.
+
+Also, is there supposed to be an AS statement here?
+SELECT ROUND(CORR(crime.CRIMECOUNT, pop.POPULATIONSIZE),3) Correlation
+*/
+
 $correlation = oci_parse($connection, 'WITH pop AS
-  (SELECT POPULATIONSIZE, countyid FROM AADAMES.POPULATIONPROFILE
-  ),
-     crime AS
-  (SELECT CRIMECOUNT, cid FROM CRIMECOUNTS
-  )
+(SELECT POPULATIONSIZE, countyid FROM AADAMES.POPULATIONPROFILE
+),
+   crime AS
+(SELECT CRIMECOUNT, cid FROM CRIMECOUNTS
+)
 
 SELECT ROUND(CORR(crime.CRIMECOUNT, pop.POPULATIONSIZE),3) Correlation
 FROM pop
 JOIN crime
-    ON pop.countyid = crime.cid
+  ON pop.countyid = crime.cid
 ORDER BY crime.cid');
+
 $result = oci_execute($correlation);
 $correlationresult = oci_fetch_row($correlation);
 
