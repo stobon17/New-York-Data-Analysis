@@ -62,8 +62,12 @@
 			<canvas id='linecomp' width="200" height="100%"></canvas>
  </div>
 </div>
+
 <div>
-<button class="pcc" id="pccid" onclick="pcc()" style="color: #1a73e8;">Pearson's Correlation Coefficient: Click to compute...</button>
+  The crime and population data were paired to observe the correlation between the population size, and the crime rate.
+  The theory is that in more highly populated counties, the crime rate would be higher, which can be visually confirmed in most cases. As the population went up, so did the number of crimes.
+  A line plot and a filled line graph were used to compare the two data sets to visualize their comparison.<br/>
+  <button class="pcc" id="pccid" onclick="pcc()" style="color: #1a73e8;">Pearson's Correlation Coefficient: Click to compute...</button>
 </div>
 <script>
 function pcc() {
@@ -195,7 +199,8 @@ chart1 = new Chart('linecomp', {
   <button class="btngraph" onclick="changeData(2)">Top 3: 2016</button>
 	<button class="btngraph" onclick="changeData(3)">Top 3: 2017</button>
 </div>
-<canvas id="chart-0" width="400" height="100"></canvas>
+  <canvas id="chart-0" width="400" height="100"></canvas>
+  Over the past several years, users can view what were the top three crimes in New York. A bar graph is used to visually represent the quantitative significance.
 </div>
 
 <!--- Line Graph --->
@@ -286,6 +291,12 @@ function changeData1(index) {
   chart1.update();
 }
 </script>
+<div>
+  Average temperature and precipitation are calculated and displayed seperately on a filled line graph. This is to easily show the highest, lowest, and average levels between each of the counties.
+  The ability to switch between the temperature and the precipitation gives the user the ability to choose what they would like to see, and to show the correlation between the
+  temperature and the precipitation.<br/>
+  If there is any correlation, it is very little. Most that can be said is that most of the higher temperature counties have high precipitation levels.
+</div>
 
 
 
@@ -302,10 +313,15 @@ function changeData1(index) {
 <div id="pie2">
 <h5 class="graph1" align="center" style="padding-bottom: 0.8rem;">Owner Occupied Housing in New York Counties</h5>
 <canvas id="chartcanvas3" width="400" height="100"></canvas>
+<div>
+  The pie graphs show the heavily weighted counties that make up a majority of the occupied versus renter housing. The charts show that the more heavily populated counties, like Kings, New York, Bronx, and Queens;
+  have more owners than renters. Bronx appears in the top in renter as well, as it is heavily populated and is one of the larger suburban counties. Kings in the highest owner occupied, and Erie is the highest renter occupied.
+</div>
 <hr class="hrgraph1">
 </div>
 </div>
 <div class="testdiv" id='testdiv' width="400" height="100"></div>
+
 
 <script>
 //!!!!!!!!!!!!!!!!!!!!AVG TEMP AND INCOME OVER THE YEARS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -347,6 +363,12 @@ Plotly.newPlot('testdiv', data, layout);
 
 </script>
 
+<div>
+  The comparision line graph shows the median household income versus the average temperature of the county. The corelation shown here is that as the income increases, so does the temperature of the county.
+  This is due these counties having a more industrial economy, which means more people will live around there, which also creates more pollution.
+  The Bronx however is the only anti-comparison in this case, likely due to the county having low-income housing and a high population, which creates pollution.
+</div>
+
 <div class="test" id='test' width="400" height="100"></div>
 <script>
 //!!!!!!!!!!!!!!!!!!!!CRIME AND EDUCATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -355,12 +377,12 @@ Plotly.newPlot('testdiv', data, layout);
 	var Education = <?php echo json_encode($educationarr); ?>;
   var Counties = <?php echo json_encode($countiesarr); ?>;
   var Population = <?php echo json_encode($popsizearr); ?>;
- 
-  var EducationRate = []; 
+
+  var EducationRate = [];
 
   for(var i = 0; i< Population.length; i++){
       EducationRate.push(Education[i]/Population[i]);
-      
+
     }
 
 
@@ -397,6 +419,12 @@ var layout = {
 Plotly.newPlot('test', data, layout)
 </script>
 
+<div>
+  This comparision line graph shows the correlation between rate of crime and education obtaintion rate. The corelation shown here is that as the rate of higher education rises, the crime rate decreases.
+  The same graph also shows that as education rates decrease, crime rates increase.
+  Interestingly enough, Erie, New York, and Schenectady County showed the opposite. Again this could be due to the sheer amount of people who live in these counties, and these counties being comprised mostly of
+  suburbs and low income housing.
+</div>
 
 <script>
 window.addEventListener('load', setup2);
